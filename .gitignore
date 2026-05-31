@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Ambientes Virtuais
+venv/
+env/
+ENV/
+.venv/
+
+# C++ (Caso decida testar os códigos originais em algum momento)
+*.o
+*.out
+*.exe
+
+# IDEs e Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# SO
+.DS_Store
+Thumbs.db
