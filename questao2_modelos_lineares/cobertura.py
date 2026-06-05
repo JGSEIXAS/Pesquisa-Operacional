@@ -1,10 +1,9 @@
-from ortools.linear_solver import pywraplp
+from docplex.mp.model import Model
 
 def main():
-    solver = pywraplp.Solver.CreateSolver('SCIP')
-    
+    mdl = Model(name='cobertura_conjuntos')
+         
     n = 5
-    # Lista de adjacência
     adj = {
         0: [1, 2],
         1: [0, 3],
@@ -12,22 +11,19 @@ def main():
         3: [1],
         4: [2]
     }
-
-    # Variável Booleana: 1 se construímos escola no bairro i
-    x = [solver.BoolVar(f'x{i}') for i in range(n)]
-
-    # Função Objetivo: Minimizar o número de escolas construídas
-    solver.Minimize(sum(x[i] for i in range(n)))
-
-    # Restrição: Todo bairro u deve ter uma escola ou um vizinho com escola
+    
+    x = [mdl.binary_var(name=f'x{i}') for i in range(n)]
+    
+    mdl.minimize(mdl.sum(x[i] for i in range(n)))
+    
     for u in range(n):
         vizinhanca = [x[u]] + [x[v] for v in adj[u]]
-        solver.Add(sum(vizinhanca) >= 1)
-
-    status = solver.Solve()
-    if status == pywraplp.Solver.OPTIMAL:
-        print(f"Número mínimo de escolas: {int(solver.Objective().Value())}")
-        escolas = [i+1 for i in range(n) if x[i].solution_value() > 0.5]
+        mdl.add_constraint(mdl.sum(vizinhanca) >= 1)
+        
+    solution = mdl.solve()
+    if solution:
+        print(f"Número mínimo de escolas: {int(mdl.objective_value)}")
+        escolas = [i+1 for i in range(n) if x[i].solution_value > 0.5]
         print(f"Construir nos bairros: {escolas}")
     else:
         print("Sem solução viável.")

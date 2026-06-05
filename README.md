@@ -2,7 +2,8 @@
 
 Repositório destinado à resolução da lista de exercícios práticos da disciplina de Pesquisa Operacional do Instituto de Computação (IC) da Universidade Federal de Alagoas (UFAL).
 
-**Autor:** João Gabriel Seixas Santos  
+**Autores:** João Gabriel Seixas Santos, Marcos Mendonça e Marcos Douglas
+
 **Professores:** Bruno Nogueira e Rian Pinheiro
 
 ---

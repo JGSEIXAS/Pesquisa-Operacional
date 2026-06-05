@@ -1,24 +1,21 @@
-from ortools.linear_solver import pywraplp
+from docplex.mp.model import Model
 
 def main():
-    solver = pywraplp.Solver.CreateSolver('GLOP')
+    mdl = Model(name='formulacao_racoes')
+         
+    AMGS = mdl.continuous_var(lb=0, name='AMGS')
+    RE = mdl.continuous_var(lb=0, name='RE')
     
-    # Variáveis contínuas
-    AMGS = solver.NumVar(0, solver.infinity(), 'AMGS')
-    RE = solver.NumVar(0, solver.infinity(), 'RE')
-
-    # Função Objetivo: Maximizar lucro (11*AMGS + 12*RE)
-    solver.Maximize(11 * AMGS + 12 * RE)
-
-    # Restrições de matéria-prima
-    solver.Add(AMGS + 4 * RE <= 10000) # Carne
-    solver.Add(5 * AMGS + 2 * RE <= 30000) # Cereais
-
-    status = solver.Solve()
-    if status == pywraplp.Solver.OPTIMAL:
-        print(f"Valor ótimo (Lucro): {solver.Objective().Value():.2f}")
-        print(f"AMGS = {AMGS.solution_value():.2f}")
-        print(f"RE = {RE.solution_value():.2f}")
+    mdl.maximize(11 * AMGS + 12 * RE)
+    
+    mdl.add_constraint(AMGS + 4 * RE <= 10000) 
+    mdl.add_constraint(5 * AMGS + 2 * RE <= 30000) 
+    
+    solution = mdl.solve()
+    if solution:
+        print(f"Valor ótimo (Lucro): {mdl.objective_value:.2f}")
+        print(f"AMGS = {AMGS.solution_value:.2f}")
+        print(f"RE = {RE.solution_value:.2f}")
     else:
         print("Sem solução viável.")
 
